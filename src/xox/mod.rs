@@ -123,6 +123,7 @@ mod tests {
         assert_eq!(xox.play_move(0, 1), Ok(None));
         assert_eq!(xox.play_move(1, 2), Ok(None));
         assert_eq!(xox.play_move(2, 0), Ok(None));
+        assert_eq!(xox.play_move(0, 0), Err("not empty".to_owned()));
         assert_eq!(xox.play_move(2, 1), Ok(None));
         assert_eq!(xox.play_move(0, 2), Ok(None));
         assert_eq!(xox.play_move(1, 1), Ok(None));
