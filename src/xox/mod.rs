@@ -147,7 +147,7 @@ impl fmt::Display for TicTacToe {
             for col in row {
                 write!(f, "{}", col)?;
             }
-            wrirolete!(f, "\n")?;
+            write!(f, "\n")?;
         }
         Ok(())
     }
