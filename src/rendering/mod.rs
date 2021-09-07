@@ -10,8 +10,8 @@ pub struct Screen {
 
 impl Screen {
     pub fn new(width: u32, height: u32, pixels: Pixels) -> Screen {
-        Screen { 
-            pixels, 
+        Screen {
+            pixels,
             width,
             height,
         }
@@ -30,7 +30,6 @@ impl Screen {
     }
 
     pub fn render(&mut self) {
-        self.pixels.render()
-            .expect("screen rendering failed");
+        self.pixels.render().expect("screen rendering failed");
     }
 }

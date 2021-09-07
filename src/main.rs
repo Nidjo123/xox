@@ -5,9 +5,9 @@ use winit_input_helper::WinitInputHelper;
 
 use pixels::{Error, Pixels, SurfaceTexture};
 
-mod xox;
 mod rendering;
 mod util;
+mod xox;
 
 const WIDTH: u32 = 320;
 const HEIGHT: u32 = 240;
@@ -15,23 +15,17 @@ const HEIGHT: u32 = 240;
 fn main() -> Result<(), Error> {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
-            .with_title("XOX")
-            .build(&event_loop)
-            .unwrap();
+        .with_title("XOX")
+        .build(&event_loop)
+        .unwrap();
 
     let window_size = window.inner_size();
-    let surface_texture = SurfaceTexture::new(
-        window_size.width,
-        window_size.height,
-        &window
-    );
-    let pixels = Pixels::new(
-        WIDTH,
-        HEIGHT, 
-        surface_texture
-    )?;
+    let surface_texture = SurfaceTexture::new(window_size.width, window_size.height, &window);
+    let pixels = Pixels::new(WIDTH, HEIGHT, surface_texture)?;
 
     let mut screen = rendering::Screen::new(WIDTH, HEIGHT, pixels);
+
+    let mut ttt = xox::TicTacToe::new();
 
     let mut input = WinitInputHelper::new();
     event_loop.run(move |event, _, control_flow| {
