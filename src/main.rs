@@ -1,3 +1,5 @@
+use std::time::SystemTime;
+
 use winit::event::{Event, VirtualKeyCode};
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::WindowBuilder;
@@ -13,6 +15,8 @@ const WIDTH: u32 = 320;
 const HEIGHT: u32 = 240;
 
 fn main() -> Result<(), Error> {
+    let start_time = SystemTime::now();
+
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title("XOX")
@@ -29,22 +33,26 @@ fn main() -> Result<(), Error> {
 
     let mut input = WinitInputHelper::new();
     event_loop.run(move |event, _, control_flow| {
-        *control_flow = ControlFlow::Wait;
-        input.update(&event);
-        if input.key_released(VirtualKeyCode::Escape) || input.quit() {
-            *control_flow = ControlFlow::Exit;
-            return;
-        }
-
-        if let Some(size) = input.window_resized() {
-            screen.resize_surface(size.width, size.height);
-        }
+        let elapsed = SystemTime::now()
+            .duration_since(start_time)
+            .expect("time went backwards");
 
         if let Event::RedrawRequested(_) = event {
             screen.clear(0xffaabb);
             screen.render();
         }
 
-        window.request_redraw();
+        if input.update(&event) {
+            if input.key_released(VirtualKeyCode::Escape) || input.quit() {
+                *control_flow = ControlFlow::Exit;
+                return;
+            }
+
+            if let Some(size) = input.window_resized() {
+                screen.resize_surface(size.width, size.height);
+            }
+
+            window.request_redraw();
+        }
     });
 }
