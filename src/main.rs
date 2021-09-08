@@ -1,6 +1,7 @@
 use std::time::SystemTime;
 
 use winit::event::{Event, VirtualKeyCode};
+use winit::dpi::LogicalSize;
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::WindowBuilder;
 use winit_input_helper::WinitInputHelper;
@@ -13,6 +14,7 @@ mod xox;
 
 const WIDTH: u32 = 320;
 const HEIGHT: u32 = 240;
+const SCALE: u32 = 3;
 
 fn main() -> Result<(), Error> {
     let start_time = SystemTime::now();
@@ -20,6 +22,8 @@ fn main() -> Result<(), Error> {
     let event_loop = EventLoop::new();
     let window = WindowBuilder::new()
         .with_title("XOX")
+        .with_inner_size(LogicalSize::new(WIDTH * SCALE, HEIGHT * SCALE))
+        .with_resizable(false)
         .build(&event_loop)
         .unwrap();
 
@@ -38,7 +42,13 @@ fn main() -> Result<(), Error> {
             .expect("time went backwards");
 
         if let Event::RedrawRequested(_) = event {
-            screen.clear(0xffaabb);
+            screen.clear(0xeeeeeeff);
+            let elapsed = elapsed.as_millis() as f32 / 1000.0;
+            let x0 = (elapsed * 2.0).cos() * 30.0 + 50.0;
+            let y0 = (elapsed * 2.0).sin() * 20.0 + 30.0;
+            let x1 = elapsed.cos() * 100.0 + 150.0;
+            let y1 = elapsed.sin() * 50.0 + 100.0;
+            screen.draw_line(x0 as i32, y0 as i32, x1 as i32, y1 as i32, 0x6655bbff);
             screen.render();
         }
 
