@@ -1,7 +1,7 @@
 use std::time::SystemTime;
 
-use winit::event::{Event, VirtualKeyCode};
 use winit::dpi::LogicalSize;
+use winit::event::{Event, VirtualKeyCode};
 use winit::event_loop::{ControlFlow, EventLoop};
 use winit::window::WindowBuilder;
 use winit_input_helper::WinitInputHelper;
@@ -49,6 +49,7 @@ fn main() -> Result<(), Error> {
             let x1 = elapsed.cos() * 100.0 + 150.0;
             let y1 = elapsed.sin() * 50.0 + 100.0;
             screen.draw_line(x0 as i32, y0 as i32, x1 as i32, y1 as i32, 0x6655bbff);
+            rendering::draw_grid(&mut screen, 0x334455ff, (10, 10));
             screen.render();
         }
 

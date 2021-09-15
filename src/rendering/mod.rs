@@ -33,14 +33,14 @@ impl Screen {
         let (x, y) = self.pixels.clamp_pixel_pos((x as isize, y as isize));
         let mut frame = self.pixels.get_frame();
         let idx = (y * self.width as usize + x) * 4;
-        frame[idx..idx+4].copy_from_slice(color);
+        frame[idx..idx + 4].copy_from_slice(color);
     }
 
     // fantastic resource: http://members.chello.at/%7Eeasyfilter/Bresenham.pdf
     pub fn draw_line(&mut self, x0: i32, y0: i32, x1: i32, y1: i32, color: u32) {
         let mut frame = self.pixels.get_frame();
         let color = color_to_rgba(color);
-        
+
         let mut x = x0;
         let mut y = y0;
         let dx = (x1 - x0).abs();
@@ -71,4 +71,14 @@ impl Screen {
     pub fn render(&mut self) {
         self.pixels.render().expect("screen rendering failed");
     }
+}
+
+pub fn draw_grid(screen: &mut Screen, color: u32, padding: (i32, i32)) {
+    let dx = (screen.width / 3) as i32;
+    let dy = (screen.height / 3) as i32;
+    let (padx, pady) = padding;
+    screen.draw_line(dx, pady, dx, 3 * dy - pady, color);
+    screen.draw_line(2 * dx, pady, 2 * dx, 3 * dy - pady, color);
+    screen.draw_line(padx, dy, 3 * dx - padx, dy, color);
+    screen.draw_line(padx, 2 * dy, 3 * dx - padx, 2 * dy, color);
 }
